@@ -10,7 +10,11 @@ class SpaceObject():
     """
     
     def __init__(self, mass):
-        self.mass = mass
+        self._mass = mass
+    
+    @property
+    def mass(self):
+        return self.mass
 
 class Sun(SpaceObject):
     
@@ -63,3 +67,34 @@ class Planet(SpaceObject):
         x = self._orbit_radius*np.cos(self._angle) + X
         y = self._orbit_radius*np.sin(self._angle) + Y
         return (x,y)
+
+class Asteroid(SpaceObject):
+  	
+    """
+    Masywny punkt, na który działają siły grawitacji od innych obiektów - 'asteroida'.
+    Atrybuty:
+    		mass - masa asteroidy
+        x - współrzędna x asteroidy
+        y - współrzędna y asteroidy
+        velocity_x - prędkość asteroidy w kierunku x
+        velocity_y - prędkość asteroidy w kierunku y
+    """
+    
+    def __init__(self, radius, mass, orbit_radius, orbit_object, velocity, angle):
+        self.x = x
+        self.y = y
+        self.velocity_x = velocity_x
+        self.velocity_y = velocity_y
+        SpaceObject.__init__(self, mass)
+
+    def action(self, planet_list):
+        net = np.array([0,0])
+        
+        for planet in planet_list:
+            planet_cord = planet.position	
+            dx, dy = planet_cord[0]-self.x, planet_cord[1]-self.y
+            distance = np.sqrt(dx**2 + dy**2)
+            force_mag = planet.mass*variables.G*(distance)**(-2)
+            net += (force_mag/distance)*np.array([dx,dy])
+        
+        
