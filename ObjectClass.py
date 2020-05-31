@@ -81,13 +81,13 @@ class Asteroid(SpaceObject):
     """
     
     def __init__(self, radius, mass, orbit_radius, orbit_object, velocity, angle):
-        self.x = x
-        self.y = y
-        self.velocity_x = velocity_x
-        self.velocity_y = velocity_y
+        self._x = x
+        self._y = y
+        self._velocity_x = velocity_x
+        self._velocity_y = velocity_y
         SpaceObject.__init__(self, mass)
 
-    def action(self, planet_list):
+    def action(self, planet_list, t):
         net = np.array([0,0])
         
         for planet in planet_list:
@@ -96,5 +96,11 @@ class Asteroid(SpaceObject):
             distance = np.sqrt(dx**2 + dy**2)
             force_mag = planet.mass*variables.G*(distance)**(-2)
             net += (force_mag/distance)*np.array([dx,dy])
-        
-        
+
+        self._velocity_x += net[0]*t     
+        self._velocity_y += net[1]*t
+
+        self._x += self._velocity_x*t
+        self._y += self._velocity_y*t
+
+
