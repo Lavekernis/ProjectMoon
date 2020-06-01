@@ -35,8 +35,11 @@ class Sun(SpaceObject):
 
     @property
     def position(self):
-        return (self.x,self.y)
+        return (self._x,self._y)
     
+    @property
+    def radius(self):
+        return self._radius
 
 class Planet(SpaceObject):
     
@@ -51,14 +54,15 @@ class Planet(SpaceObject):
         angular_velocity - prędkość kątowa planety
     """
     
-    def __init__(self, radius, mass, orbit_radius, orbit_object, velocity, angle):
+    def __init__(self, radius, mass, orbit_radius, orbit_object, angular_velocity, angle):
+        self._radius = radius
         self._orbit_radius = orbit_radius
         self._orbit_object = orbit_object
         self._angular_velocity = angular_velocity
         self._angle = angle
         SpaceObject.__init__(self, mass)
     
-    def move(t):
+    def move(self, t):
         self._angle += self.angular_velocity*t
     
     @property
@@ -68,39 +72,72 @@ class Planet(SpaceObject):
         y = self._orbit_radius*np.sin(self._angle) + Y
         return (x,y)
 
+    @property
+    def radius(self):
+        return self._radius
+
+    @property
+    def angle(self):
+        return self._angle
+
 class Asteroid(SpaceObject):
   	
     """
     Masywny punkt, na który działają siły grawitacji od innych obiektów - 'asteroida'.
     Atrybuty:
-    		mass - masa asteroidy
+    	mass - masa asteroidy
         x - współrzędna x asteroidy
         y - współrzędna y asteroidy
         velocity_x - prędkość asteroidy w kierunku x
         velocity_y - prędkość asteroidy w kierunku y
+        crashed - wartość logiczna, True - asteroida uderzyła w jakieś inne ciało, False - nie stało się to
+        crash_site - ciało, w które uderzyła asteroida
     """
     
-    def __init__(self, radius, mass, orbit_radius, orbit_object, velocity, angle):
+    def __init__(self, mass, x, y, velocity_x, velocity_y):
         self._x = x
         self._y = y
         self._velocity_x = velocity_x
         self._velocity_y = velocity_y
         SpaceObject.__init__(self, mass)
+        self._crashed = False
 
     def action(self, planet_list, t):
-        net = np.array([0,0])
         
-        for planet in planet_list:
-            planet_cord = planet.position	
-            dx, dy = planet_cord[0]-self.x, planet_cord[1]-self.y
-            distance = np.sqrt(dx**2 + dy**2)
-            force_mag = planet.mass*variables.G*(distance)**(-2)
-            net += (force_mag/distance)*np.array([dx,dy])
+        if self._crashed == False:
+            acceleration_net = np.array([0,0])
+            for planet in planet_list:
+                planet_cord = planet.position	
+                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                distance = np.sqrt(dx**2 + dy**2)
+                acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
+                acceleration_net += acceleration_magnitude * np.array([dx,dy])
+    
+            self._velocity_x += acceleration_net[0]*t     
+            self._velocity_y += acceleration_net[1]*t
+    
+            self._x += self._velocity_x*t
+            self._y += self._velocity_y*t
+            
+            for planet in planet_list:
+                planet_cord = planet.position	
+                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                distance = np.sqrt(dx**2 + dy**2)
+                if distance < planet.radius:
+                    self._crashed = True
+                    self._crash_site = planet
+                    if isinstance(planet, Planet):
+                        self._crash_angle = planet.angle + np.arctan(self._velocity_x/self._velocity_y)
+                    break
 
-        self._velocity_x += net[0]*t     
-        self._velocity_y += net[1]*t
-
-        self._x += self._velocity_x*t
-        self._y += self._velocity_y*t
-
-
+    @property
+    def is_crashed(self):
+        return self._crashed
+    
+    @property
+    def crash_site(self):
+        return self._crash_site
+    
+    @property
+    def crash_angle(self):
+        return self._crash_angle
