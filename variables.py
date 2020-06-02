@@ -14,3 +14,4 @@ T_moon = 27.32
 G = 6.674*10**-20 #stała grawitacyjna w km^3/kg*s
 d_mars = 228*10**6 #średnia odległość Marsa od Słońca
 simulation_step = 1/4
+av_velocity = 1 #TOOOOOOOOOOOOOOOOOOOOOOOOOOODOOOOOOOOOOOOOOOOOOOOOOOOOOO
