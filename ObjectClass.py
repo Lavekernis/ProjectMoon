@@ -28,7 +28,7 @@ class Sun(SpaceObject):
         y - współrzędna y obiektu
     """
     
-    def __init__(self, x = 0, y = 0):
+    def __init__(self,   x = 0, y = 0):
         self._radius = variables.R_sun
         self._x = x
         self._y = y
@@ -49,37 +49,56 @@ class Planet(SpaceObject):
     Atrybuty:
         radius - promień planety
         mass - masa planety
-        angle - kąt
-        orbit_radius - promień orbity po której porusza się planeta
-        orbit_object - obiekt wokół którego porusza się planeta
-        angular_velocity - prędkość kątowa planety
+        orbit_object - obiekt przy którym pojawia się planeta
+        orbit_radius - początkowa odległość planety od orbitowanego obiektu
+        angular_velocity - początkowa prędkość kątowa planety
     """
     
-    def __init__(self, radius, mass, orbit_radius, orbit_object, angular_velocity):
+    def __init__(self, radius, mass, orbit_radius, orbit_object, orbit_period):
         self._radius = radius
-        self._orbit_radius = orbit_radius
+        #obliczanie początkowych pozycji i prędkości na podstawie przybliżenia kolistej orbity,
+        #możliwe że niewystarczająca dokładność
+        angle = random.random()*2*np.pi
+        x, y = orbit_object.position
+        x += orbit_radius*np.cos(angle)
+        y += orbit_radius*np.sin(angle)
+        self._x = x
+        self._y = y
+        angular_velocity = 2*np.pi/orbit_period
+        v_x = -angular_velocity*orbit_radius*np.sin(angle)
+        v_y = angular_velocity*orbit_radius*np.cos(angle)
+        self._velocity_x = v_x
+        self._velocity_y = v_y
         self._orbit_object = orbit_object
-        self._angular_velocity = angular_velocity
-        self._angle = random.random()*2*np.pi
         SpaceObject.__init__(self, mass)
     
-    def move(self, t):
-        self._angle += self.angular_velocity*t
+    def action(self, planet_list, t):
+        acceleration_net = np.array([0,0])
+        for planet in planet_list:
+            if planet != self:
+                planet_cord = planet.position	
+                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                distance = np.sqrt(dx**2 + dy**2)
+                acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
+                acceleration_net += acceleration_magnitude * np.array([dx,dy])
     
+        self._velocity_x += acceleration_net[0]*t     
+        self._velocity_y += acceleration_net[1]*t
+        
+        self._x += self._velocity_x*t
+        self._y += self._velocity_y*t
+        
     @property
     def position(self):
-        X , Y = self.orbit_object.position
-        x = self._orbit_radius*np.cos(self._angle) + X
-        y = self._orbit_radius*np.sin(self._angle) + Y
-        return (x,y)
+        return (self._x,self._y)
 
     @property
     def radius(self):
         return self._radius
-
+    
     @property
-    def angle(self):
-        return self._angle
+    def orbit_object(self):
+        return self._orbit_object
 
 class Asteroid(SpaceObject):
   	
@@ -104,7 +123,7 @@ class Asteroid(SpaceObject):
         #Prędkość
         theta = random.randint()*2*np.pi
         self._velocity_x = variables.av_velocity * np.cos(theta)
-        self._velocity_y = velocity_y * np.sin(theta)
+        self._velocity_y = variables.av_velocity * np.sin(theta)
         
 
         SpaceObject.__init__(self, mass = 1)
@@ -131,14 +150,22 @@ class Asteroid(SpaceObject):
             
             #-----------Obsługa-kolizji---------------------
             for planet in planet_list:
-                planet_cord = planet.position	
-                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                planet_coord = planet.position	
+                dx, dy = planet_coord[0] - self.x, planet_coord[1] - self.y
                 distance = np.sqrt(dx**2 + dy**2)
                 if distance < planet.radius:
                     self._crashed = True
                     self._crash_site = planet
-                    if isinstance(planet, Planet):
-                        self._crash_angle = planet.angle + np.arctan(self._velocity_x/self._velocity_y)
+                    #słaby sposób sprawdzania czy planeta jest Księżycem, można by wymyślić lepszy
+                    if planet.radius == variables.R_moon:
+                        #liczę kąt uderzenia z twierdzenia cosinusów
+                        earth_coord = planet.orbit_object.position
+                        d2x, d2y =  planet_coord[0] - earth_coord[0], planet_coord[1] - earth_coord[1]
+                        earth_to_moon = d2x**2 + d2y**2
+                        d3x, d3y = earth_coord[0] - self.x, earth_coord[1] - self.y
+                        earth_to_asteroid = d3x**2 + d3y**2
+                        cos = (-earth_to_asteroid+earth_to_moon+distance**2)/2*earth_to_moon*distance
+                        self._crash_angle = np.arccos(cos)
                     break
             #-----------------------------------------------
     
