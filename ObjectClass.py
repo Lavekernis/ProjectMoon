@@ -117,8 +117,9 @@ class Asteroid(SpaceObject):
     def __init__(self, distance):
         
         #Pozycja
-        self._x = distance
-        self._y = random.randint(-50,50)
+        phi = random.randint()*2*np.pi
+        self._x = distance * np.cos(phi)
+        self._y = distance * np.cos(phi)
         
         #Prędkość
         theta = random.randint()*2*np.pi
