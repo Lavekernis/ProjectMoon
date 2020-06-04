@@ -10,6 +10,6 @@ R_moon = 1737.4
 M_moon = 7.342e22
 d_moon = 385000
 T_moon = 27.32 * 24
-G = (6.674*3600)*10**-20 #stała grawitacyjna w km^3/kg*s
+G = (6.674*3600**2)*1e-20 #stała grawitacyjna w km^3/kg*s
 d_mars = 228e6 #średnia odległość Marsa od Słońca
 av_velocity = 1 #TOOOOOOOOOOOOOOOOOOOOOOOOOOODOOOOOOOOOOOOOOOOOOOOOOOOOOO

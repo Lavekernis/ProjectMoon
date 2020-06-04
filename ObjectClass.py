@@ -8,11 +8,19 @@ class SpaceObject():
     Dowolny masywny obiekt w kosmosie.
     Atrybuty:
         mass - masa obiektu
+        x - współrzędna x obiektu
+        y - współrzędna y obiektu
     """
     
-    def __init__(self, mass):
+    def __init__(self, mass ,x , y):
         self._mass = mass
-    
+        self._x = x
+        self._y = y
+
+    @property
+    def position(self):
+        return (self._x,self._y)
+
     @property
     def mass(self):
         return self._mass
@@ -30,13 +38,7 @@ class Sun(SpaceObject):
     
     def __init__(self,   x = 0, y = 0):
         self._radius = variables.R_sun
-        self._x = x
-        self._y = y
-        SpaceObject.__init__(self, mass = variables.M_sun)
-
-    @property
-    def position(self):
-        return (self._x,self._y)
+        SpaceObject.__init__(self, variables.M_sun, x, y)
     
     @property
     def radius(self):
@@ -62,15 +64,14 @@ class Planet(SpaceObject):
         x, y = orbit_object.position
         x += orbit_radius*np.cos(angle)
         y += orbit_radius*np.sin(angle)
-        self._x = x
-        self._y = y
+        SpaceObject.__init__(self, mass, x, y)
         angular_velocity = 2*np.pi/orbit_period
         v_x = -angular_velocity*orbit_radius*np.sin(angle)
         v_y = angular_velocity*orbit_radius*np.cos(angle)
         self._velocity_x = v_x
         self._velocity_y = v_y
         self._orbit_object = orbit_object
-        SpaceObject.__init__(self, mass)
+
     
     def action(self, planet_list, t):
         acceleration_net = np.array([0,0])
@@ -81,16 +82,16 @@ class Planet(SpaceObject):
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
                 acceleration_net = acceleration_net + acceleration_magnitude * np.array([dx,dy])
-    
-        self._velocity_x += acceleration_net[0]*t     
+                if planet.mass == variables.M_earth:
+                    print(f'z: { acceleration_magnitude}')
+                if planet.mass == variables.M_moon:
+                    print(f'm: {acceleration_magnitude}')
+
+        self._velocity_x += acceleration_net[0]*t
         self._velocity_y += acceleration_net[1]*t
         
         self._x += self._velocity_x*t
         self._y += self._velocity_y*t
-        
-    @property
-    def position(self):
-        return (self._x,self._y)
 
     @property
     def radius(self):
@@ -118,16 +119,17 @@ class Asteroid(SpaceObject):
         
         #Pozycja
         phi = random.random()*2*np.pi
-        self._x = distance * np.cos(phi)
-        self._y = distance * np.cos(phi)
-        
+        x = distance * np.cos(phi)
+        y = distance * np.cos(phi)
+        SpaceObject.__init__(self, 1, x, y)
+
         #Prędkość
         theta = random.random()*2*np.pi
         self._velocity_x = variables.av_velocity * np.cos(theta)
         self._velocity_y = variables.av_velocity * np.sin(theta)
         
 
-        SpaceObject.__init__(self, mass = 1)
+
         self._crashed = False
 
     def action(self, planet_list, t):
