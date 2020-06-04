@@ -77,7 +77,7 @@ class Planet(SpaceObject):
         for planet in planet_list:
             if planet != self:
                 planet_cord = planet.position	
-                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                dx, dy = planet_cord[0] - self._x, planet_cord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
                 acceleration_net += acceleration_magnitude * np.array([dx,dy])
@@ -117,12 +117,12 @@ class Asteroid(SpaceObject):
     def __init__(self, distance):
         
         #Pozycja
-        phi = random.randint()*2*np.pi
+        phi = random.random()*2*np.pi
         self._x = distance * np.cos(phi)
         self._y = distance * np.cos(phi)
         
         #Prędkość
-        theta = random.randint()*2*np.pi
+        theta = random.random()*2*np.pi
         self._velocity_x = variables.av_velocity * np.cos(theta)
         self._velocity_y = variables.av_velocity * np.sin(theta)
         
@@ -137,7 +137,7 @@ class Asteroid(SpaceObject):
             acceleration_net = np.array([0,0])
             for planet in planet_list:
                 planet_cord = planet.position	
-                dx, dy = planet_cord[0] - self.x, planet_cord[1] - self.y
+                dx, dy = planet_cord[0] - self._x, planet_cord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
                 acceleration_net += acceleration_magnitude * np.array([dx,dy])
