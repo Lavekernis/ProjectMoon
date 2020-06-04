@@ -15,7 +15,7 @@ class SpaceObject():
     
     @property
     def mass(self):
-        return self.mass
+        return self._mass
 
 class Sun(SpaceObject):
     
@@ -80,7 +80,7 @@ class Planet(SpaceObject):
                 dx, dy = planet_cord[0] - self._x, planet_cord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
-                acceleration_net += acceleration_magnitude * np.array([dx,dy])
+                acceleration_net = acceleration_net + acceleration_magnitude * np.array([dx,dy])
     
         self._velocity_x += acceleration_net[0]*t     
         self._velocity_y += acceleration_net[1]*t
@@ -140,7 +140,7 @@ class Asteroid(SpaceObject):
                 dx, dy = planet_cord[0] - self._x, planet_cord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
-                acceleration_net += acceleration_magnitude * np.array([dx,dy])
+                acceleration_net = acceleration_net + acceleration_magnitude * np.array([dx,dy])
     
             self._velocity_x += acceleration_net[0]*t     
             self._velocity_y += acceleration_net[1]*t
@@ -152,7 +152,7 @@ class Asteroid(SpaceObject):
             #-----------Obsługa-kolizji---------------------
             for planet in planet_list:
                 planet_coord = planet.position	
-                dx, dy = planet_coord[0] - self.x, planet_coord[1] - self.y
+                dx, dy = planet_coord[0] - self._x, planet_coord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 if distance < planet.radius:
                     self._crashed = True
@@ -163,7 +163,7 @@ class Asteroid(SpaceObject):
                         earth_coord = planet.orbit_object.position
                         d2x, d2y =  planet_coord[0] - earth_coord[0], planet_coord[1] - earth_coord[1]
                         earth_to_moon = d2x**2 + d2y**2
-                        d3x, d3y = earth_coord[0] - self.x, earth_coord[1] - self.y
+                        d3x, d3y = earth_coord[0] - self._x, earth_coord[1] - self._y
                         earth_to_asteroid = d3x**2 + d3y**2
                         cos = (-earth_to_asteroid+earth_to_moon+distance**2)/2*earth_to_moon*distance
                         self._crash_angle = np.arccos(cos)

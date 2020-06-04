@@ -13,7 +13,7 @@ class Space():
         earth = Planet(radius = R_earth, mass = M_earth, orbit_radius = d_earth, orbit_object = sun, orbit_period = T_earth)
         moon = Planet(radius = R_moon, mass = M_moon, orbit_radius = d_moon, orbit_object = earth, orbit_period = T_moon)
         self.planet_list = [sun, earth, moon]
-        self.asteroid_list = [Asteroid(distance = distance) for i in range(0,100)]
+        self._asteroid_list = [Asteroid(distance = distance) for i in range(0,100)]
 
     def action(self, t):
         self.planet_list[1].action(self.planet_list, t)
