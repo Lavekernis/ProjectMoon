@@ -26,7 +26,7 @@ Y_E = []
 X_M = []
 Y_M = []
 t1 = time.time()
-for i in range(100):
+for i in range(10):
     x_e, y_e = space.planet_list[1].position
     x_m, y_m = space.planet_list[2].position
     X_E.append(x_e)

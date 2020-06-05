@@ -75,17 +75,17 @@ class Planet(SpaceObject):
     
     def action(self, planet_list, t):
         acceleration_net = np.array([0,0])
-        for planet in planet_list:
+        for i,planet in enumerate(planet_list):
             if planet != self:
                 planet_cord = planet.position	
                 dx, dy = planet_cord[0] - self._x, planet_cord[1] - self._y
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
                 acceleration_net = acceleration_net + acceleration_magnitude * np.array([dx,dy])
-                if planet.mass == variables.M_earth:
-                    print(f'z: { acceleration_magnitude}')
-                if planet.mass == variables.M_moon:
-                    print(f'm: {acceleration_magnitude}')
+                print(f'{i}:{acceleration_magnitude}')
+        print(acceleration_net)
+        print('end')
+
 
         self._velocity_x += acceleration_net[0]*t
         self._velocity_y += acceleration_net[1]*t
