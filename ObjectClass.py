@@ -68,6 +68,9 @@ class Planet(SpaceObject):
         angular_velocity = 2*np.pi/orbit_period
         v_x = -angular_velocity*orbit_radius*np.sin(angle)
         v_y = angular_velocity*orbit_radius*np.cos(angle)
+        if orbit_object.mass != variables.M_sun:
+            v_x += orbit_object._velocity_x
+            v_y += orbit_object._velocity_y
         self._velocity_x = v_x
         self._velocity_y = v_y
         self._orbit_object = orbit_object
@@ -82,9 +85,11 @@ class Planet(SpaceObject):
                 distance = np.sqrt(dx**2 + dy**2)
                 acceleration_magnitude = planet.mass * variables.G * (distance)**(-3)
                 acceleration_net = acceleration_net + acceleration_magnitude * np.array([dx,dy])
-                print(f'{i}:{acceleration_magnitude}')
-        print(acceleration_net)
-        print('end')
+#                if self.mass == variables.M_moon:
+ #                   print(f'{i}:{acceleration_magnitude}, {distance}')
+  #      if self.mass == variables.M_moon:
+   #         print(acceleration_net)
+    #        print('end')
 
 
         self._velocity_x += acceleration_net[0]*t
