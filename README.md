@@ -24,3 +24,4 @@ i poprawnie oblicza kąt.
 
 
 ![asdasd](https://github.com/Lavekernis/ProjectMoon/blob/master/Figure_2.png?raw=true)
+![asdasd](https://github.com/Lavekernis/ProjectMoon/blob/master/Figure_1.png?raw=true)
