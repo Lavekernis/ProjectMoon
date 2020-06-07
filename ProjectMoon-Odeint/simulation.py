@@ -69,8 +69,16 @@ def model(z, t, planet_list, asteroid_list):
     
 #----------------------- Symulacja układu z asteroidami -----------------------
 
-def Simulate(asteroid_number = 30, end = 1000  , frequency = 1000):
-
+def Simulate(asteroid_number = 5, end = 1000  , frequency = 1000):
+    """
+    Funkcja przerpowadzająca symulację układu ziemia-słońce-księżyc-asteroidy.
+    Argumenty:
+    asteroid_number - liczba asteroid wykorzystywanych do przeprowadzenia symulacji
+    end - końcowy krok symulacji
+    frequecy - ilość próbek
+    Zwraca:
+    Listę kątów, pod którymi uderzyly w księzyc asteroidy.
+    """
     #------------------------ Obiekty w układzie ------------------------------    
 
     sun = Sun()
@@ -128,6 +136,7 @@ def Simulate(asteroid_number = 30, end = 1000  , frequency = 1000):
 
 #------------------------------------------------------------------------------
 
+#Narzędzie do rysowania wykresów trajektorii wersja złożona
 
 # for i in range(0,16,4):
 #     x,y = [],[]
@@ -135,6 +144,8 @@ def Simulate(asteroid_number = 30, end = 1000  , frequency = 1000):
 #         x.append(j[i+2])
 #         y.append(j[i+3])
 #         ax.plot(x,y)
+
+#Narzędzie do rysowania wykresów trajektorii wersja podstawowa
 #  x_e = []
 #  y_e = []
 #  x_m = []
@@ -143,7 +154,6 @@ def Simulate(asteroid_number = 30, end = 1000  , frequency = 1000):
 #  y_a = []
 #  x_a_2 = []
 #  y_a_2 = []
-
 #  for i in sol:
 #      x_e.append(i[2])
 #      y_e.append(i[3])
