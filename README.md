@@ -23,3 +23,4 @@ w księżyc, jednak przy umieszczeniu testowej asteroidy w księżycu program wy
 i poprawnie oblicza kąt.
 
 
+![asdasd](https://github.com/Lavekernis/ProjectMoon/blob/master/Figure_2.png?raw=true)
