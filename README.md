@@ -5,9 +5,9 @@ Ostateczną wersją jest ta w folderze Odeint, drugą zrobiliśmy przed konsulta
 po których ją przerobiliśmy.
 
 2) Obliczanie kąta zderzenia
-Przyjęta metoda obliczania kąta zderzenia asteroidy z księżycem zwraca wyłącznie kąty z przedziału [0,pi].
+Przyjęta metoda obliczania kąta zderzenia asteroidy z księżycem zwraca wyłącznie kąty z przedziału <img src="https://render.githubusercontent.com/render/math?math=[0,\pi]">.
 Nie jest to jednak problem, ponieważ daje nam to obraz tego, ile asteroid pada na którą stronę księżyca
-i w jakim rozkładzie (kąty z przedziału [pi/2,pi] reprezentują ciemną stronę księżyca).
+i w jakim rozkładzie (kąty z przedziału <img src="https://render.githubusercontent.com/render/math?math=[\pi/2,\pi]"> reprezentują ciemną stronę księżyca).
 
 
 3) Problem z działaniem symulacji
@@ -21,3 +21,5 @@ Prawdopodobnie tak - na załączonych grafikach widzimy przewidziane przez symul
 które zgadzają się z przewidywaniami teoretycznymi. Nie zaobserwowaliśmy jeszcze asteroidy uderzającej
 w księżyc, jednak przy umieszczeniu testowej asteroidy w księżycu program wykrywa ją
 i poprawnie oblicza kąt.
+
+
