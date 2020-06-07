@@ -24,4 +24,8 @@ i poprawnie oblicza kąt.
 
 
 ![asdasd](https://github.com/Lavekernis/ProjectMoon/blob/master/Figure_2.png?raw=true)
+
+Rysunek trojektorii Ziemi wraz z Księżycem (kolor czerowny i niebieski) oraz dwoma asteroidami.  
 ![asdasd](https://github.com/Lavekernis/ProjectMoon/blob/master/Figure_1.png?raw=true)
+
+Wykres wielkości składowej x oraz y prędkości Ziemi i Księżyca, dla kolejnych czasów.
