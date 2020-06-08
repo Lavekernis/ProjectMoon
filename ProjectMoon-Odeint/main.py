@@ -1,4 +1,4 @@
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, cpu_count
 import simulation
 import matplotlib.pyplot as plt
 import numpy
@@ -14,7 +14,7 @@ def Proces(q, asteroid_number = 5, end = 9000  , frequency = 10000):
 
 if __name__ == '__main__':
     
-    for _ in range(int(input("Podaj liczbę procesów: "))):
+    for _ in range(cpu_count()):
         p = Process(target=Proces, args=(q,5,9000,10000))
         p.start()
         process_list.append(p)
@@ -28,4 +28,3 @@ if __name__ == '__main__':
 #Rysowanie histogramu
     plt.hist(angle_list,[numpy.pi*i/30 for i in range(31)])
     plt.show()
-
